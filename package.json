@@ -8,6 +8,13 @@
     "url": "http://larsgraubner.de"
   },
   "homepage": "https://github.com/lgraubner/hash-handler",
+  "keywords": [
+    "ecosystem:browser",
+    "hash",
+    "hashbang",
+    "hashhandler",
+    "hashchange"
+  ],
   "main": "dist/HashHandler.min.js",
   "repository": {
     "type": "git",
