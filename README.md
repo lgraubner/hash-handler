@@ -41,15 +41,11 @@ var HashHandler = require("hash-handler");
 
 ## API
 
-This module offers several methods to alter the hash fragment. Use it as follows:
-
-```JavaScript
-HashHandler.set("foo");
-```
+This module offers several methods to alter the hash fragment.
 
 ### clear
 
-Removes all values from the hash. The hash itself will remain!
+Removes the hash fragment. The hash itself will remain!
 
 ```JavaScript
 HashHandler.clear();
@@ -59,11 +55,8 @@ HashHandler.clear();
 
 Returns current hash fragment.
 
-```
-http://www.example.com/#bar
-```
-
 ```JavaScript
+// http://www.example.com/#bar
 console.log(HashHandler.get()); // bar
 ```
 
