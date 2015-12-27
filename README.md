@@ -22,7 +22,7 @@ None.
 Install HashHandler via NPM or download it [here](https://raw.githubusercontent.com/lgraubner/hash-handler/master/dist/HashHandler.min.js).
 
 ```Bash
-npm install hash-handler
+npm install hash-handler --save
 ```
 
 **Classic**
