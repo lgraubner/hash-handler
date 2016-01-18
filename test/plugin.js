@@ -33,14 +33,16 @@ describe('HashHandler', function () {
       });
 
       it('should return the hash fragment', function (done) {
-        var str = 'foo';
+        var str = 'foo ä';
+        var strEncoded = encodeURI(str);
 
-        window.location.hash = '#' + str;
+        window.location.hash = '#' + strEncoded;
 
         setTimeout(function () {
           var val = hash.get();
           expect(val).to.be.a.string;
           expect(val).to.equal(str);
+          expect(hash.hash).to.equal(str);
           done();
         }, 50);
       });
@@ -82,10 +84,10 @@ describe('HashHandler', function () {
       });
 
       it('should set hash fragment', function () {
-        var str = 'foo';
+        var str = 'foo ä';
 
         expect(hash.set(str)).to.be.ok;
-        expect(window.location.hash).to.equal('#' + str);
+        expect(window.location.hash).to.equal('#' + encodeURI(str));
       });
     });
   });

@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  */
 (function (root, factory) {
@@ -135,7 +135,7 @@
      * @return {String} Hash fragment
      */
     HashHandler.prototype._getHashFragment = function () {
-      return window.location.hash.replace(/^#?/, '');
+      return decodeURI(window.location.hash.replace(/^#?/, ''));
     };
 
     /**
@@ -144,7 +144,7 @@
      * @param  {String} fragment  New hash fragment
      */
     HashHandler.prototype._setHashFragment = function (fragment) {
-      window.location.hash = '#' + fragment;
+      window.location.hash = '#' + encodeURI(fragment);
     };
 
     /**
