@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.2.0
+ * @version 1.0.0
  * @license MIT
  */
 (function (root, factory) {
@@ -174,10 +174,13 @@
     /**
      * Singleton, return existing instance or create a new one.
      */
-    if (!instance) {
-      instance = new HashHandler();
-    }
-
-    return instance;
+    return {
+      getInstance: function () {
+        if (!instance) {
+          instance = new HashHandler();
+        }
+        return instance;
+      },
+    };
   })();
 }));

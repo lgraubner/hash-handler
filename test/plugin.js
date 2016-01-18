@@ -4,21 +4,24 @@
 var expect = chai.expect;
 
 describe('HashHandler', function () {
+  var hash;
+
   describe('API', function () {
     beforeEach(function (done) {
-      HashHandler.clear();
+      hash = HashHandler.getInstance();
+      hash.clear();
       done();
     });
 
     describe('#clear()', function () {
       it('should be a function', function () {
-        expect(HashHandler.clear).to.be.a.function;
+        expect(hash.clear).to.be.a.function;
       });
 
       it('should clear the hash fragment', function (done) {
-        HashHandler.set('foo');
+        hash.set('foo');
 
-        expect(HashHandler.clear()).to.be.ok;
+        expect(hash.clear()).to.be.ok;
         expect(window.location.hash).to.be.empty;
         done();
       });
@@ -26,7 +29,7 @@ describe('HashHandler', function () {
 
     describe('#get()', function () {
       it('should be a function', function () {
-        expect(HashHandler.get).to.be.a.function;
+        expect(hash.get).to.be.a.function;
       });
 
       it('should return the hash fragment', function (done) {
@@ -35,7 +38,7 @@ describe('HashHandler', function () {
         window.location.hash = '#' + str;
 
         setTimeout(function () {
-          var val = HashHandler.get();
+          var val = hash.get();
           expect(val).to.be.a.string;
           expect(val).to.equal(str);
           done();
@@ -47,12 +50,12 @@ describe('HashHandler', function () {
       var listener;
 
       afterEach(function (done) {
-        HashHandler.unlisten(listener);
+        hash.unlisten(listener);
         done();
       });
 
       it('should listen for hash changes', function (done) {
-        listener = HashHandler.listen(sinon.spy());
+        listener = hash.listen(sinon.spy());
 
         window.location.hash = 'foo';
 
@@ -64,7 +67,7 @@ describe('HashHandler', function () {
 
       it('should provide hash fragment', function (done) {
         var str = 'foo';
-        listener = HashHandler.listen(function (fragment) {
+        listener = hash.listen(function (fragment) {
           expect(fragment).to.be.a.string;
           expect(fragment).to.equal(str);
           done();
@@ -75,13 +78,13 @@ describe('HashHandler', function () {
 
     describe('#set()', function () {
       it('should be a function', function () {
-        expect(HashHandler.set).to.be.a.function;
+        expect(hash.set).to.be.a.function;
       });
 
       it('should set hash fragment', function () {
         var str = 'foo';
 
-        expect(HashHandler.set(str)).to.be.ok;
+        expect(hash.set(str)).to.be.ok;
         expect(window.location.hash).to.equal('#' + str);
       });
     });

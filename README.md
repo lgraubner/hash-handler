@@ -39,6 +39,12 @@ Include `HashHandler.min.js` before the closing `body` tag.
 var HashHandler = require("hash-handler");
 ```
 
+The handler is provided as a singleton to avoid side effects. Get the instance and start right away.
+
+```JavaScript
+var hash = HashHandler.getInstance();
+```
+
 ## API
 
 This module offers several methods to alter the hash fragment.
@@ -48,7 +54,7 @@ This module offers several methods to alter the hash fragment.
 Removes the hash fragment. The hash itself will remain!
 
 ```JavaScript
-HashHandler.clear();
+hash.clear();
 ```
 
 ### get
@@ -57,7 +63,7 @@ Returns current hash fragment.
 
 ```JavaScript
 // http://www.example.com/#bar
-console.log(HashHandler.get()); // bar
+console.log(hash.get()); // bar
 ```
 
 ### set
@@ -65,7 +71,7 @@ console.log(HashHandler.get()); // bar
 Sets the hash fragment.
 
 ```JavaScript
-HashHandler.set("foo"); // http://example.com/#foo
+hash.set("foo"); // http://example.com/#foo
 ```
 
 ### listen
@@ -73,7 +79,7 @@ HashHandler.set("foo"); // http://example.com/#foo
 Registers a function to listen for hash changes.
 
 ```JavaScript
-var listener = HashHandler.listen(function(fragment) {
+var listener = hash.listen(function(fragment) {
     console.log(fragment); // current hash fragment
 });
 ```
@@ -81,7 +87,7 @@ var listener = HashHandler.listen(function(fragment) {
 You can also listen for specific hash fragments by specifying a string or regex:
 
 ```JavaScript
-var listener = HashHandler.listen("foo", function(fragment) {
+var listener = hash.listen("foo", function(fragment) {
     // called if hash fragment matches "foo"
 });
 ```
@@ -91,5 +97,5 @@ var listener = HashHandler.listen("foo", function(fragment) {
 Removes listener function.
 
 ```JavaScript
-HashHandler.unlisten(listener);
+hash.unlisten(listener);
 ```
