@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.3.0
+ * @version 1.3.1
  * @license MIT
  */
 (function (root, factory) {
