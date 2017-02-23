@@ -66,6 +66,16 @@ Returns current hash fragment.
 console.log(hash.get()); // bar
 ```
 
+You can enable very simple query string parsing like this:
+
+```JavaScript
+// http://www.example.com/#foo=bar&num=2&hello
+console.log(hash.get(true));
+// => { foo: 'bar', num: '2', hello: true }
+```
+
+This will not convert any types. To have a more flexible query string parsing use a library like [`query-string`](https://github.com/sindresorhus/query-string) and use only `hash.get()`.
+
 ### set
 
 Sets the hash fragment.
@@ -84,7 +94,7 @@ var listener = hash.listen(function(fragment) {
 });
 ```
 
-You can also listen for specific hash fragments by specifying a string or regex:
+You can also listen for specific hash fragment by specifying a string first:
 
 ```JavaScript
 var listener = hash.listen("foo", function(fragment) {

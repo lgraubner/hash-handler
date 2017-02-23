@@ -46,6 +46,25 @@ describe('HashHandler', function () {
           done();
         }, 50);
       });
+
+      it('should parse the query string', function (done) {
+        var str = 'foo=bar&num=2';
+        var queryObj = {
+          foo: 'bar',
+          num: '2',
+        };
+        var strEncoded = encodeURI(str);
+
+        window.location.hash = '#' + strEncoded;
+
+        setTimeout(function () {
+          var val = hash.get(true);
+          expect(val).to.be.an.object;
+          expect(val).to.deep.equal(queryObj);
+          expect(hash.hash).to.equal(str);
+          done();
+        });
+      });
     });
 
     describe('#listen()', function () {
