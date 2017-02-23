@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.2.0
+ * @version 1.3.0
  * @license MIT
  */
 (function (root, factory) {
@@ -39,6 +39,33 @@
     return !!(obj && obj.constructor && obj.call && obj.apply);
   }
 
+  /**
+   * Simple query string parser.
+   *
+   * @param  {string} str hash string
+   * @return {Object}     parsed query string object
+   */
+  function parseQueryString(str) {
+    var queryObj = {};
+    var items = str.split('&');
+    if (items.length > 0) {
+      queryObj = items.reduce(function (obj, item) {
+        var parts = item.split('=');
+        var value = parts[1];
+
+        if (!value) {
+          value = true;
+        }
+
+        obj[parts[0]] = value;
+
+        return obj;
+      }, {});
+    }
+
+    return queryObj;
+  }
+
   return (function () {
     'use strict';
 
@@ -66,29 +93,8 @@
      * @return {String} Hash fragment
      */
     HashHandler.prototype.get = function (parse) {
-      var queryObj = {};
-      var hash;
-
-      parse = parse || false;
-
       if (parse) {
-        hash = this.hash.split('&');
-        if (hash.length > 0) {
-          queryObj = hash.reduce(function (obj, item) {
-            var parts = item.split('=');
-            var value = parts[1];
-
-            if (!value) {
-              value = true;
-            } else {
-              obj[parts[0]] = value;
-            }
-
-            return obj;
-          }, {});
-
-          return queryObj;
-        }
+        return parseQueryString(this.hash);
       }
       return this.hash;
     };
@@ -178,7 +184,7 @@
       var hash = this.hash;
       each(this.listeners, function (listener) {
         if (listener.regex.test(hash) || listener.trigger === 'default') {
-          listener.cb.call(window, hash);
+          listener.cb.call(window, hash, parseQueryString(hash));
         }
       });
     };

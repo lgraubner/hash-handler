@@ -89,15 +89,16 @@ hash.set("foo"); // http://example.com/#foo
 Registers a function to listen for hash changes.
 
 ```JavaScript
-var listener = hash.listen(function(fragment) {
-    console.log(fragment); // current hash fragment
+var listener = hash.listen(function(hash, parsedHash) {
+    console.log(hash); // current hash fragment
+    console.log(parsedHash); // parsed query string
 });
 ```
 
-You can also listen for specific hash fragment by specifying a string first:
+You can also listen for a specific hash by specifying a string as first argument:
 
 ```JavaScript
-var listener = hash.listen("foo", function(fragment) {
+var listener = hash.listen("foo", function(hash) {
     // called if hash fragment matches "foo"
 });
 ```

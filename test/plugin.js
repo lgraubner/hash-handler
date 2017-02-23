@@ -86,11 +86,15 @@ describe('HashHandler', function () {
         }, 50);
       });
 
-      it('should provide hash fragment', function (done) {
+      it('should provide hash and parsed hash', function (done) {
         var str = 'foo';
-        listener = hash.listen(function (fragment) {
+        var obj = {
+          foo: true,
+        };
+        listener = hash.listen(function (fragment, parsedHash) {
           expect(fragment).to.be.a.string;
           expect(fragment).to.equal(str);
+          expect(parsedHash).to.deep.equal(obj);
           done();
         });
         window.location.hash = '#' + str;
