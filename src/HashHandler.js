@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.3.1
+ * @version 1.4.0
  * @license MIT
  */
 (function (root, factory) {
@@ -66,6 +66,24 @@
     return queryObj;
   }
 
+  /**
+   * Stringify object to query string.
+   *
+   * @param  {Object} obj
+   * @return {String}     stringified object
+   */
+  function stringify(obj) {
+    var parts = [];
+    var i;
+    for (i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
+      }
+    }
+    return parts.join('&');
+  }
+
+
   return (function () {
     'use strict';
 
@@ -106,9 +124,16 @@
      * @return {Boolean}      Success
      */
     HashHandler.prototype.set = function (fragment) {
-      this.hash = fragment;
+      var newHash = fragment;
+      if (typeof fragment === 'object') {
+        newHash = stringify(fragment);
+      } else if (typeof fragment !== 'string') {
+        throw new Error('set() expects either a string or object, ' + typeof fragment + ' given.');
+      }
+
+      this.hash = newHash;
       this._onHashChange();
-      this._setHashFragment(fragment);
+      this._setHashFragment(newHash);
 
       return true;
     };

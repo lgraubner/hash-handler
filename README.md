@@ -36,7 +36,7 @@ Include `HashHandler.min.js` before the closing `body` tag.
 **CommonJS**
 
 ```JavaScript
-var HashHandler = require("hash-handler");
+var HashHandler = require('hash-handler');
 ```
 
 The handler is provided as a singleton to avoid side effects. Get the instance and start right away.
@@ -81,8 +81,20 @@ This will not convert any types. To have a more flexible query string parsing us
 Sets the hash fragment.
 
 ```JavaScript
-hash.set("foo"); // http://example.com/#foo
+hash.set('foo'); // http://example.com/#foo
 ```
+
+The method also accepts an object which will be translated into a query string:
+
+```JavaScript
+hash.set({
+  foo: 'bar',
+  num: 2,
+});
+// => http://example.com/#foo=bar&num=2
+```
+
+Be aware, that nested objects are not supported!
 
 ### listen
 

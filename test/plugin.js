@@ -112,6 +112,16 @@ describe('HashHandler', function () {
         expect(hash.set(str)).to.be.ok;
         expect(window.location.hash).to.equal('#' + encodeURI(str));
       });
+
+      it('should accept an object as argument', function () {
+        var obj = {
+          foo: 'bar',
+          num: 2,
+        };
+
+        expect(hash.set(obj)).to.be.ok;
+        expect(window.location.hash).to.equal('#foo=bar&num=2');
+      });
     });
   });
 });
