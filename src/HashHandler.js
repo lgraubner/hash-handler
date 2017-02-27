@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.4.0
+ * @version 1.4.1
  * @license MIT
  */
 (function (root, factory) {
@@ -111,10 +111,15 @@
      * @return {String} Hash fragment
      */
     HashHandler.prototype.get = function (parse) {
+      var hash = this.hash;
       if (parse) {
-        return parseQueryString(this.hash);
+        if (this.hash !== '') {
+          hash = parseQueryString(this.hash);
+        } else {
+          hash = {};
+        }
       }
-      return this.hash;
+      return hash;
     };
 
     /**
