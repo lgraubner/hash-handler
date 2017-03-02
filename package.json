@@ -1,6 +1,6 @@
 {
   "name": "hash-handler",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Simple handler for URI hashes.",
   "author": {
     "name": "Lars Graubner",

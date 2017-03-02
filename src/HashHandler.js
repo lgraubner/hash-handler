@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.4.1
+ * @version 1.5.0
  * @license MIT
  */
 (function (root, factory) {
@@ -47,7 +47,12 @@
    */
   function parseQueryString(str) {
     var queryObj = {};
-    var items = str.split('&');
+    var items;
+    try {
+      items = str.split('&');
+    } catch (e) {
+      items = [];
+    }
     if (items.length > 0) {
       queryObj = items.reduce(function (obj, item) {
         var parts = item.split('=');
@@ -110,14 +115,19 @@
      *
      * @return {String} Hash fragment
      */
-    HashHandler.prototype.get = function (parse) {
+    HashHandler.prototype.get = function (arg) {
       var hash = this.hash;
-      if (parse) {
+      var curHashObj = parseQueryString(hash);
+      // bool, return parsed object
+      if (typeof arg === 'boolean' && arg) {
         if (this.hash !== '') {
           hash = parseQueryString(this.hash);
         } else {
           hash = {};
         }
+      } else if (typeof arg === 'string') {
+        // return value by key
+        hash = curHashObj[arg];
       }
       return hash;
     };
@@ -128,12 +138,24 @@
      * @param  {String} fragment  New hash fragment
      * @return {Boolean}      Success
      */
-    HashHandler.prototype.set = function (fragment) {
-      var newHash = fragment;
-      if (typeof fragment === 'object') {
-        newHash = stringify(fragment);
-      } else if (typeof fragment !== 'string') {
-        throw new Error('set() expects either a string or object, ' + typeof fragment + ' given.');
+    HashHandler.prototype.set = function () {
+      var curHashObj = parseQueryString(this.hash);
+      var arg = arguments[0];
+      var newHash = arg;
+
+      // key value pair
+      if (arguments.length > 1) {
+        curHashObj[arg] = arguments[1];
+        newHash = stringify(curHashObj);
+      } else {
+        // single arg object
+        if (typeof arg === 'object') {
+          newHash = stringify(arg);
+        } else if (typeof arg !== 'string') {
+          // single arg full hash
+          // eslint-disable-next-line
+          throw new Error('set() expects either a string or object, ' + typeof arg + ' given.');
+        }
       }
 
       this.hash = newHash;

@@ -63,7 +63,7 @@ Returns current hash fragment.
 
 ```JavaScript
 // http://www.example.com/#bar
-console.log(hash.get()); // bar
+console.log(hash.get()); // => bar
 ```
 
 You can enable very simple query string parsing like this:
@@ -75,6 +75,13 @@ console.log(hash.get(true));
 ```
 
 This will not convert any types. To have a more flexible query string parsing use a library like [`query-string`](https://github.com/sindresorhus/query-string) and use only `hash.get()`.
+
+If hash is a query string you can also get a value by key:
+
+```JavaScript
+// http://www.example.com/#foo=bar
+console.log(hash.get('foo')); // => bar
+```
 
 ### set
 
@@ -95,6 +102,14 @@ hash.set({
 ```
 
 Be aware, that nested objects are not supported!
+
+It's also possible to set values by key, without removing existing key value pairs.
+
+```JavaScript
+// => http://example.com/#foo=bar&num=2
+hash.set('num', 123);
+// => http://example.com/#foo=bar&num=123
+```
 
 ### listen
 

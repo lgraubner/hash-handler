@@ -63,7 +63,23 @@ describe('HashHandler', function () {
           expect(val).to.deep.equal(queryObj);
           expect(hash.hash).to.equal(str);
           done();
-        });
+        }, 50);
+      });
+
+      it('should get query string value by key', function (done) {
+        var str = 'foo=bar&num=2';
+        var strEncoded = encodeURI(str);
+
+        window.location.hash = '#' + strEncoded;
+
+        setTimeout(function () {
+          var val = hash.get('foo');
+          var undefinedKey = hash.get('undef');
+          expect(val).to.be.a.string;
+          expect(val).to.equal('bar');
+          expect(undefinedKey).to.equal(undefined);
+          done();
+        }, 50);
       });
     });
 
@@ -121,6 +137,21 @@ describe('HashHandler', function () {
 
         expect(hash.set(obj)).to.be.ok;
         expect(window.location.hash).to.equal('#foo=bar&num=2');
+      });
+
+      it('should a single query string value by key', function (done) {
+        var str = 'foo=bar&num=2';
+        var newStr = 'foo=bar&num=123';
+        var strEncoded = encodeURI(str);
+
+        window.location.hash = '#' + strEncoded;
+
+        setTimeout(function () {
+          hash.set('num', 123);
+          expect(window.location.hash).to.equal('#' + newStr);
+          expect(hash.hash).to.equal(newStr);
+          done();
+        }, 50);
       });
     });
   });
