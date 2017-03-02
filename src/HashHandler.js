@@ -2,7 +2,7 @@
  * Simple handler for URI hashes.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.5.0
+ * @version 1.5.1
  * @license MIT
  */
 (function (root, factory) {
@@ -50,6 +50,9 @@
     var items;
     try {
       items = str.split('&');
+      items = items.filter(function (n) {
+        return n !== '';
+      });
     } catch (e) {
       items = [];
     }
