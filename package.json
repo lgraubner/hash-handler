@@ -1,6 +1,6 @@
 {
   "name": "hash-handler",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "description": "Simple handler for URI hashes.",
   "author": {
     "name": "Lars Graubner",
@@ -10,12 +10,14 @@
   "homepage": "https://github.com/lgraubner/hash-handler",
   "keywords": [
     "ecosystem:browser",
+    "history",
     "hash",
     "hashbang",
     "hashhandler",
     "hashchange"
   ],
-  "main": "dist/HashHandler.min.js",
+  "main": "dist/HashHandler.js",
+  "module": "dist/HashHandler.es.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/lgraubner/hash-handler.git"
@@ -35,10 +37,12 @@
     "mocha": "^2.3.4",
     "sinon": "^1.17.2"
   },
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "!**/__tests__"
+  ],
   "scripts": {
     "test": "gulp test",
     "build": "gulp build"
