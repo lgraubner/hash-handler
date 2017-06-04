@@ -1,4 +1,5 @@
 // @flow
+// $FlowFixMe
 import queryString from 'query-string';
 
 /** hash-handler: Simple hash manipulation
@@ -8,15 +9,14 @@ import queryString from 'query-string';
 export default function hash() {
   const all = [];
 
-  function setHash(hash) {
-    const str = hash;
-
-    if (typeof hash === 'object') {
+  function setHash(newHash) {
+    if (typeof newHash === 'object') {
       // stringify object
-      hash = queryString.stringify(hash);
+      // eslint-disable-next-line
+      newHash = queryString.stringify(newHash);
     }
 
-    location.hash = hash;
+    location.hash = newHash;
   }
 
   function getParsedHash() {
@@ -24,7 +24,7 @@ export default function hash() {
   }
 
   return {
-    get(...args) {
+    get(...args: any[]) {
       if (args.length) {
         const parsedHash = getParsedHash();
 
@@ -41,8 +41,8 @@ export default function hash() {
       return location.hash.substr(1);
     },
 
-    set(...args) {
-      const hash = args[0] || '';
+    set(...args: any[]) {
+      const plainHash = args[0] || '';
       const parsedHash = getParsedHash();
 
       if (args.length === 2) {
@@ -55,7 +55,7 @@ export default function hash() {
         setHash(Object.assign(parsedHash, args[0]));
       } else {
         // set simple string
-        setHash(args[0]);
+        setHash(plainHash);
       }
     },
 
@@ -64,13 +64,13 @@ export default function hash() {
       setHash('');
     },
 
-    listen(handler) {
+    listen(handler: Function) {
       // register handler and store it
       window.addEventListener('hashchange', handler);
       all.push(handler);
     },
 
-    remove(handler) {
+    remove(handler: Function) {
       const index = all.indexOf(handler);
       if (index !== -1) {
         // remove handler from store

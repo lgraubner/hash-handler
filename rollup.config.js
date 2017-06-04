@@ -6,6 +6,7 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
 export default {
   entry: 'src/index.js',
+  external: ['query-string'],
   useStrict: false,
   sourceMap: true,
   plugins: [flow(), buble()],
