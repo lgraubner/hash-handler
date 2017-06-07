@@ -9,53 +9,56 @@ import queryString from 'query-string';
 export default function hash() {
   const all = [];
 
-  function setHash(newHash) {
-    if (typeof newHash === 'object') {
+  // set window hash
+  const setHash = newHash => {
+    let hashVal = newHash;
+    if (typeof hashVal === 'object') {
       // stringify object
-      // eslint-disable-next-line
-      newHash = queryString.stringify(newHash);
+      hashVal = queryString.stringify(hashVal);
     }
 
-    location.hash = newHash;
-  }
+    location.hash = hashVal;
+  };
 
-  function getParsedHash() {
-    return queryString.parse(location.hash);
-  }
+  // get window hash and parse it
+  const getParsedHash = () => queryString.parse(location.hash);
+
+  window.addEventListener('hashchange', () => {
+    const parsedHash = getParsedHash();
+    all.forEach(handle => {
+      handle(parsedHash);
+    });
+  });
 
   return {
     get(...args: any[]) {
-      if (args.length) {
-        const parsedHash = getParsedHash();
+      const parsedHash = getParsedHash();
 
-        if (args[0] === true) {
-          // return parsed hash
-          return parsedHash;
-        }
-
+      if (args.length && typeof args[0] === 'string') {
         // return hash value by key
         return parsedHash[String(args[0])];
       }
 
-      // return raw hash
-      return location.hash.substr(1);
+      // return parsed hash
+      return parsedHash;
     },
 
     set(...args: any[]) {
       const plainHash = args[0] || '';
       const parsedHash = getParsedHash();
 
-      if (args.length === 2) {
-        // set key/value pair to existing query
-        parsedHash[String(args[0])] = args[1];
+      if (typeof args[0] === 'string') {
+        if (args.length === 2) {
+          // set key/value pair to existing query
+          parsedHash[String(args[0])] = args[1];
 
-        setHash(parsedHash);
-      } else if (args.length === 1 && typeof args[0] === 'object') {
-        // assign object to existing hash key/vals
+          setHash(parsedHash);
+        } else {
+          // set simple string
+          setHash(plainHash);
+        }
+      } else if (typeof args[0] === 'object') {
         setHash(Object.assign(parsedHash, args[0]));
-      } else {
-        // set simple string
-        setHash(plainHash);
       }
     },
 
@@ -66,7 +69,6 @@ export default function hash() {
 
     listen(handler: Function) {
       // register handler and store it
-      window.addEventListener('hashchange', handler);
       all.push(handler);
     },
 
@@ -74,7 +76,6 @@ export default function hash() {
       const index = all.indexOf(handler);
       if (index !== -1) {
         // remove handler from store
-        window.removeEventListener('hashchange', handler);
         all.splice(index, 1);
       }
     },
