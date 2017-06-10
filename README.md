@@ -4,7 +4,7 @@
 
 > Handle location hash query strings with ease.
 
-Aims to make working with location hash and query strings easier. Get and set query strings as simple objects and listen for hash changes.
+Aims to make working with location hash and query strings easier. Get and set query strings as simple objects and listen for hash changes. Query string arguments get sorted to guarantee consistent URL's.
 
 ## Table of contents
 

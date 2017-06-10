@@ -1,5 +1,6 @@
-/* eslint no-param-reassign:0 */
 // @flow
+
+/* eslint no-param-reassign:0 */
 // $FlowFixMe
 import queryString from 'query-string';
 

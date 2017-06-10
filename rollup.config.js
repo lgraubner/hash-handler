@@ -13,7 +13,7 @@ export default {
   },
   useStrict: false,
   sourceMap: true,
-  plugins: [flow(), buble()],
+  plugins: [flow({ pretty: true }), buble()],
   targets: [
     { dest: pkg.main, format: 'umd' },
     { dest: pkg.module, format: 'es' },
