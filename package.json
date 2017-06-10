@@ -1,7 +1,7 @@
 {
   "name": "hash-handler",
   "version": "2.0.0",
-  "description": "Simple handler for URI hashes.",
+  "description": "Handle location hash query strings with ease.",
   "author": {
     "name": "Lars Graubner",
     "email": "mail@larsgraubner.de",
@@ -14,10 +14,11 @@
     "hash",
     "hashbang",
     "hashhandler",
-    "hashchange"
+    "hashchange",
+    "location"
   ],
-  "main": "dist/HashHandler.js",
-  "module": "dist/HashHandler.es.js",
+  "main": "dist/hashHandler.js",
+  "module": "dist/hashHandler.es.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/lgraubner/hash-handler.git"

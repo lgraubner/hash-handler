@@ -7,11 +7,15 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 export default {
   entry: 'src/index.js',
   external: ['query-string'],
+  moduleName: 'hashHandler',
+  globals: {
+    'query-string': 'queryString',
+  },
   useStrict: false,
   sourceMap: true,
   plugins: [flow(), buble()],
   targets: [
-    { dest: pkg.main, format: 'umd', moduleName: pkg.name },
+    { dest: pkg.main, format: 'umd' },
     { dest: pkg.module, format: 'es' },
   ],
 };
