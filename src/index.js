@@ -1,3 +1,4 @@
+/* eslint no-param-reassign:0 */
 // @flow
 // $FlowFixMe
 import queryString from 'query-string';
@@ -6,78 +7,112 @@ import queryString from 'query-string';
  * @name hash-handler
  * @returns {hash}
  */
-export default function hash() {
-  const all = [];
+export default function hashHandler() {
+  const handlers = [];
 
   // set window hash
-  const setHash = newHash => {
+  const setLocationHash = newHash => {
     let hashVal = newHash;
     if (typeof hashVal === 'object') {
+      // sort by keys
+      hashVal = Object.keys(hashVal).sort().reduce((r, k) => {
+        // $FlowFixMe
+        r[k] = hashVal[k];
+        return r;
+      }, {});
+
       // stringify object
       hashVal = queryString.stringify(hashVal);
     }
 
-    location.hash = hashVal;
+    location.hash = String(hashVal);
   };
 
   // get window hash and parse it
   const getParsedHash = () => queryString.parse(location.hash);
 
-  window.addEventListener('hashchange', () => {
+  // hashchange event handler
+  const handleHashchange = () => {
     const parsedHash = getParsedHash();
-    all.forEach(handle => {
+    handlers.forEach(handle => {
       handle(parsedHash);
     });
-  });
+  };
+
+  // add listener
+  window.addEventListener('hashchange', handleHashchange);
 
   return {
-    get(...args: any[]) {
-      const parsedHash = getParsedHash();
-
-      if (args.length && typeof args[0] === 'string') {
-        // return hash value by key
-        return parsedHash[String(args[0])];
-      }
-
+    /**
+     * Get current hash.
+     *
+     * @param {String} key     Hash query string key
+     * @return {Object|String} Hash object or single value
+     */
+    get() {
       // return parsed hash
-      return parsedHash;
+      return getParsedHash();
     },
 
-    set(...args: any[]) {
-      const plainHash = args[0] || '';
+    /**
+     * Extend current hash with object values.
+     *
+     * @param {Object} newHash
+     */
+    set(newHash: { [string]: any }) {
+      // merge with existing hash
       const parsedHash = getParsedHash();
-
-      if (typeof args[0] === 'string') {
-        if (args.length === 2) {
-          // set key/value pair to existing query
-          parsedHash[String(args[0])] = args[1];
-
-          setHash(parsedHash);
-        } else {
-          // set simple string
-          setHash(plainHash);
-        }
-      } else if (typeof args[0] === 'object') {
-        setHash(Object.assign(parsedHash, args[0]));
-      }
+      setLocationHash(Object.assign(parsedHash, newHash));
     },
 
+    /**
+     * Replace current hash.
+     *
+     * @param {Object} newHash
+     */
+    replace(newHash: string | { [string]: any }) {
+      setLocationHash(newHash);
+    },
+
+    /**
+     * Clear hash.
+     */
     clear() {
       // clear hash, # will also remain
-      setHash('');
+      setLocationHash('');
     },
 
-    listen(handler: Function) {
-      // register handler and store it
-      all.push(handler);
+    /**
+     * Register hashchange event handler.
+     *
+     * @param {Function} handler
+     */
+    registerListener(handler: Function) {
+      // register handler and handlers it
+      handlers.push(handler);
     },
 
-    remove(handler: Function) {
-      const index = all.indexOf(handler);
+    /**
+     * Remove hashchange event handler.
+     *
+     * @param {Function} handler
+     */
+    removeListener(handler: Function) {
+      const index = handlers.indexOf(handler);
       if (index !== -1) {
-        // remove handler from store
-        all.splice(index, 1);
+        // remove handler from handlers
+        handlers.splice(index, 1);
       }
+    },
+
+    /**
+     * Remove all event listeners.
+     */
+    destroy() {
+      // remove event listener
+      window.removeEventListener('hashchange', handleHashchange);
+      // clear handler handlers
+      handlers.length = 0;
     },
   };
 }
