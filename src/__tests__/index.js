@@ -1,19 +1,11 @@
-import chai, { expect } from 'chai';
-import { stub } from 'sinon';
-import sinonChai from 'sinon-chai';
-
 import hashHandler from '../';
 
-chai.use(sinonChai);
-
-it('should default export a function', () => {
-  expect(hashHandler).to.be.a('function');
+test('should default export a function', () => {
+  expect(hashHandler).toBeInstanceOf(Function);
 });
 
 describe('hashHandler#', () => {
   let hash;
-
-  stub(window, 'hash');
 
   beforeEach(() => {
     hash = hashHandler();
@@ -24,8 +16,9 @@ describe('hashHandler#', () => {
   });
 
   describe('get()', () => {
-    it('should be a function', () => {
-      expect(hash).to.have.property('get').that.is.a('function');
+    test('should be a function', () => {
+      expect(hash).toHaveProperty('get');
+      expect(hash.get).toBeInstanceOf(Function);
     });
   });
 });

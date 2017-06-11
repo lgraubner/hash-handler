@@ -1,4 +1,4 @@
-import buble from 'rollup-plugin-buble';
+import babel from 'rollup-plugin-babel';
 import flow from 'rollup-plugin-flow';
 import fs from 'fs';
 
@@ -13,7 +13,7 @@ export default {
   },
   useStrict: false,
   sourceMap: true,
-  plugins: [flow({ pretty: true }), buble()],
+  plugins: [flow({ pretty: true }), babel()],
   targets: [
     { dest: pkg.main, format: 'umd' },
     { dest: pkg.module, format: 'es' },
