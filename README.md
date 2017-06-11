@@ -1,139 +1,156 @@
-# HashHandler
+# hashHandler
 
-[![Travis](https://img.shields.io/travis/lgraubner/hash-handler.svg)](https://travis-ci.org/lgraubner/hash-handler) [![David Dev](https://img.shields.io/david/dev/lgraubner/hash-handler.svg)](https://david-dm.org/lgraubner/hash-handler#info=devDependencies) [![npm](https://img.shields.io/npm/v/hash-handler.svg)](https://www.npmjs.com/package/hash-handler)
+[![npm](https://img.shields.io/npm/v/hash-handler.svg)](https://www.npmjs.com/package/hash-handler) [![Travis](https://img.shields.io/travis/lgraubner/hash-handler.svg)](https://travis-ci.org/lgraubner/hash-handler) [![David](https://img.shields.io/david/lgraubner/hash-handler.svg)](https://david-dm.org/lgraubner/hash-handler)
 
-> Simple handler for URI hashes.
+> Handle location hash query strings with ease.
 
-This module aims to make working with URI hashes easier. **This is not meant for complex single page app routings!** Make sure to comply the Googles AJAX crawling theme  [specification](https://developers.google.com/webmasters/ajax-crawling/docs/specification) if you provide content via AJAX which should be crawled.
+Aims to make working with location hash and query strings easier. Get and set query strings as simple objects and listen for hash changes. Query string arguments get sorted to guarantee consistent URL's.
 
-## Dependencies
+## Table of contents
 
-None.
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+- [License](#license)
 
-## Supported Browsers
+## Install
 
-* Chrome 10+
-* Firefox 6+
-* Safari 5.1+
-* IE 9+
+This module is available on [npm](https://www.npmjs.com/).
+
+```
+$ npm install hash-handler
+```
+
+If you are using some kind of bundler ([webpack](https://webpack.js.org), [rollup](https://rollupjs.org)...) you can import it like this:
+
+```JavaScript
+// ES6
+import hash-handler from 'hash-handler';
+
+// CommonJS
+var hash-handler = require('hash-handler');
+```
+
+The [UMD](https://github.com/umdjs/umd) build is also available on [unpkg](https://unpkg.com/):
+
+```HTML
+<script src="https://unpkg.com/hash-handler/dist/hashHandler.js"></script>
+```
 
 ## Usage
 
-Install HashHandler via NPM or download it [here](https://raw.githubusercontent.com/lgraubner/hash-handler/master/dist/HashHandler.min.js).
-
-```Bash
-npm install hash-handler --save
-```
-
-**Classic**
-
-Include `HashHandler.min.js` before the closing `body` tag.
-
-```HTML
-<script src="node_modules/hash-handler/dist/HashHandler.min.js"></script>
-```
-
-**CommonJS**
-
 ```JavaScript
-var HashHandler = require('hash-handler');
-```
+import hashHandler from 'hash-handler';
 
-The handler is provided as a singleton to avoid side effects. Get the instance and start right away.
+const hash = hashHandler();
 
-```JavaScript
-var hash = HashHandler.getInstance();
+// set hash value(s)
+hash.set({
+  age: 5
+});
+
+// set more hash values
+hash.set({
+  color: 'blue'
+});
+
+// get hash query string object
+console.log(hash.get()); // => { age: 5, color: 'blue' }
+
+// replace whole hash
+hash.replace({
+  age: 7
+});
+
+console.log(hash.get()); // => { age: 7 }
+
+const handler = () => {
+  // do stuff
+};
+
+// listen for hash changes
+hash.registerListener(handler);
+
+// stop listening
+hash.removeListener(handler);
+
+// remove all handlers and event listener
+hash.destroy();
 ```
 
 ## API
 
-This module offers several methods to alter the hash fragment.
+### hashHandler()
 
-### clear
+Initializes hashHandler instance.
 
-Removes the hash fragment. The hash itself will remain!
+```JavaScript
+const hash = hashHandler();
+```
+
+### hashHandler.get()
+
+Returns parsed query string hash.
+
+```JavaScript
+// http://www.example.com/#name=max
+console.log(hash.get()); // => { name: 'max' }
+```
+
+### hashHandler.set(newHash)
+
+Sets the hash query string. Extends existing key value pairs.
+
+```JavaScript
+hash.set({
+  name: 'max'
+}); // http://example.com/#name=max
+```
+
+### hashHandler.replace(newHash)
+
+Replace existing hash query string.
+
+```JavaScript
+hash.replace({
+  animal: 'shark'
+});
+```
+
+### hashHandler.clear()
+
+Removes the hash fragment. The hash itself will remain.
 
 ```JavaScript
 hash.clear();
 ```
 
-### get
+### hashHandler.registerListener(handler)
 
-Returns current hash fragment.
-
-```JavaScript
-// http://www.example.com/#bar
-console.log(hash.get()); // => bar
-```
-
-You can enable very simple query string parsing like this:
+Registers a handler to be executed on hash change.
 
 ```JavaScript
-// http://www.example.com/#foo=bar&num=2&hello
-console.log(hash.get(true));
-// => { foo: 'bar', num: '2', hello: true }
-```
-
-This will not convert any types. To have a more flexible query string parsing use a library like [`query-string`](https://github.com/sindresorhus/query-string) and use only `hash.get()`.
-
-If hash is a query string you can also get a value by key:
-
-```JavaScript
-// http://www.example.com/#foo=bar
-console.log(hash.get('foo')); // => bar
-```
-
-### set
-
-Sets the hash fragment.
-
-```JavaScript
-hash.set('foo'); // http://example.com/#foo
-```
-
-The method also accepts an object which will be translated into a query string:
-
-```JavaScript
-hash.set({
-  foo: 'bar',
-  num: 2,
-});
-// => http://example.com/#foo=bar&num=2
-```
-
-Be aware, that nested objects are not supported!
-
-It's also possible to set values by key, without removing existing key value pairs.
-
-```JavaScript
-// => http://example.com/#foo=bar&num=2
-hash.set('num', 123);
-// => http://example.com/#foo=bar&num=123
-```
-
-### listen
-
-Registers a function to listen for hash changes.
-
-```JavaScript
-var listener = hash.listen(function(hash, parsedHash) {
-    console.log(hash); // current hash fragment
-    console.log(parsedHash); // parsed query string
+hash.registerListener((hash) => {
+    // called everytime hash changes
+    console.log(hash); // new hash
 });
 ```
 
-You can also listen for a specific hash by specifying a string as first argument:
+### hashHandler.removeListener(handler)
+
+Removes registered listener function.
 
 ```JavaScript
-var listener = hash.listen("foo", function(hash) {
-    // called if hash fragment matches "foo"
-});
+hash.removeListener(handler);
 ```
+### hashHandler.destroy()
 
-### unlisten
-
-Removes listener function.
+Remove all handlers and hashchange event listener.
 
 ```JavaScript
-hash.unlisten(listener);
+hash.destroy();
 ```
+
+## License
+
+[MIT](https://github.com/lgraubner/mqr/blob/master/LICENSE) © [Lars Graubner](https://larsgraubner.com)

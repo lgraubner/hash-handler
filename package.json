@@ -1,7 +1,7 @@
 {
   "name": "hash-handler",
-  "version": "1.5.1",
-  "description": "Simple handler for URI hashes.",
+  "version": "2.0.0",
+  "description": "Handle location hash query strings with ease.",
   "author": {
     "name": "Lars Graubner",
     "email": "mail@larsgraubner.de",
@@ -10,12 +10,15 @@
   "homepage": "https://github.com/lgraubner/hash-handler",
   "keywords": [
     "ecosystem:browser",
+    "history",
     "hash",
     "hashbang",
     "hashhandler",
-    "hashchange"
+    "hashchange",
+    "location"
   ],
-  "main": "dist/HashHandler.min.js",
+  "main": "dist/hashHandler.js",
+  "module": "dist/hashHandler.es.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/lgraubner/hash-handler.git"
@@ -24,23 +27,53 @@
     "url": "https://github.com/lgraubner/hash-handler/issues"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "eslint-config-airbnb": "^3.0.0",
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^1.1.1",
-    "gulp-header": "^1.7.1",
-    "gulp-mocha-phantomjs": "^0.10.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.5.1",
-    "mocha": "^2.3.4",
-    "sinon": "^1.17.2"
-  },
-  "engines": {
-    "node": ">=4.0.0"
+    "babel-eslint": "^7.2.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "15.0.1",
+    "eslint-config-prettier": "^2.1.1",
+    "eslint-plugin-flowtype": "^2.32.1",
+    "eslint-plugin-import": "2.3.0",
+    "eslint-plugin-jsx-a11y": "5.0.3",
+    "eslint-plugin-react": "7.0.1",
+    "flow-bin": "^0.47.0",
+    "gzip-size-cli": "^2.0.0",
+    "husky": "^0.13.3",
+    "jest": "^20.0.4",
+    "lint-staged": "^3.4.1",
+    "npm-run-all": "^4.0.2",
+    "prettier": "^1.3.1",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.42.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "uglify-js": "^3.0.15"
   },
   "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "!**/__tests__"
+  ],
   "scripts": {
-    "test": "gulp test",
-    "build": "gulp build"
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "clean": "rimraf dist",
+    "flow": "flow",
+    "rollup": "rollup -c",
+    "minify": "uglifyjs $npm_package_main -cm -o $npm_package_main --source-map url=\"${npm_package_main}.map\"",
+    "build": "npm-run-all lint flow test clean rollup minify size",
+    "size": "echo \"Gzip size: $(gzip-size $npm_package_main)\"",
+    "test": "jest"
+  },
+  "dependencies": {
+    "query-string": "^4.3.4"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier --single-quote --trailing-comma es5 --write",
+      "git add"
+    ]
   }
 }
