@@ -1,4 +1,4 @@
-# hashHandler
+# hash-handler
 
 [![npm](https://img.shields.io/npm/v/hash-handler.svg)](https://www.npmjs.com/package/hash-handler) [![Travis](https://img.shields.io/travis/lgraubner/hash-handler.svg)](https://travis-ci.org/lgraubner/hash-handler) [![David](https://img.shields.io/david/lgraubner/hash-handler.svg)](https://david-dm.org/lgraubner/hash-handler)
 
@@ -25,10 +25,10 @@ If you are using some kind of bundler ([webpack](https://webpack.js.org), [rollu
 
 ```JavaScript
 // ES6
-import hash-handler from 'hash-handler';
+import Hash from 'hash-handler';
 
 // CommonJS
-var hash-handler = require('hash-handler');
+var Hash = require('hash-handler');
 ```
 
 The [UMD](https://github.com/umdjs/umd) build is also available on [unpkg](https://unpkg.com/):
@@ -40,9 +40,9 @@ The [UMD](https://github.com/umdjs/umd) build is also available on [unpkg](https
 ## Usage
 
 ```JavaScript
-import hashHandler from 'hash-handler';
+import Hash from 'hash-handler';
 
-const hash = hashHandler();
+const hash = Hash();
 
 // set hash value(s)
 hash.set({
@@ -80,15 +80,15 @@ hash.destroy();
 
 ## API
 
-### hashHandler()
+### Hash()
 
-Initializes hashHandler instance.
+Initializes hash-handler instance.
 
 ```JavaScript
-const hash = hashHandler();
+const hash = Hash();
 ```
 
-### hashHandler.get()
+### Hash.get()
 
 Returns parsed query string hash.
 
@@ -97,7 +97,7 @@ Returns parsed query string hash.
 console.log(hash.get()); // => { name: 'max' }
 ```
 
-### hashHandler.set(newHash)
+### Hash.set(newHash)
 
 Sets the hash query string. Extends existing key value pairs.
 
@@ -107,7 +107,7 @@ hash.set({
 }); // http://example.com/#name=max
 ```
 
-### hashHandler.replace(newHash)
+### Hash.replace(newHash)
 
 Replace existing hash query string.
 
@@ -117,7 +117,7 @@ hash.replace({
 });
 ```
 
-### hashHandler.clear()
+### Hash.clear()
 
 Removes the hash fragment. The hash itself will remain.
 
@@ -125,7 +125,7 @@ Removes the hash fragment. The hash itself will remain.
 hash.clear();
 ```
 
-### hashHandler.registerListener(handler)
+### Hash.registerListener(handler)
 
 Registers a handler to be executed on hash change.
 
@@ -136,14 +136,14 @@ hash.registerListener((hash) => {
 });
 ```
 
-### hashHandler.removeListener(handler)
+### Hash.removeListener(handler)
 
 Removes registered listener function.
 
 ```JavaScript
 hash.removeListener(handler);
 ```
-### hashHandler.destroy()
+### Hash.destroy()
 
 Remove all handlers and hashchange event listener.
 
