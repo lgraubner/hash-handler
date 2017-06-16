@@ -19,6 +19,14 @@ describe('hashHandler#', () => {
     hash.destroy();
   });
 
+  describe('()', () => {
+    test('should add hash change event handler', () => {
+      global.addEventListener = jest.fn();
+      hashHandler();
+      expect(global.addEventListener).toHaveBeenCalled();
+    });
+  });
+
   describe('get()', () => {
     test('should be a function', () => {
       expect(hash).toHaveProperty('get');
